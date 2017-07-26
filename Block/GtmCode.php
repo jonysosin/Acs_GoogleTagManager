@@ -20,7 +20,6 @@ class GtmCode extends Template {
 
     /**
      * @param Context $context
-     * @param CookieHelper $cookieHelper
      * @param GtmHelper $gtmHelper
      * @param array $data
      */
