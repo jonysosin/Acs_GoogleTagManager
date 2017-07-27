@@ -46,6 +46,7 @@ class GtmCode extends Template {
      * @return string
      */
     protected function _toHtml() {
+
         if (!$this->_gtmHelper->isEnabled()) {
             return '';
         }

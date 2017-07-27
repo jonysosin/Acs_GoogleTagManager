@@ -1,59 +1,48 @@
 define([
     "jquery",
-    "jquery/ui",
-    "matchMedia",
-    "mage/mage",
-    "domReady!"
-], function($){
-    'use strict';
+    'uiComponent',
+    'Magento_Customer/js/customer-data'
+], function($, Component, customerData){
 
-    // Current product data
-    var currentProductData = false;
+    customerData.get('cart').subscribe(function(changes) {
+        // For this example, we'll just print out the change info
+        alert(2);
 
-    // Flag to check if main slider exists
-    var mainSliderExists = false;
+    }, null, "arrayChange");
+    a = customerData.get('cart');
 
-    var senderGtm = {
-        loadingReady: false,
-        widgets: [],
-        data: {
-            promos: [],
-            products: [],
-            detail : undefined,
-        },
-
-        init : function(){
-            if ((typeof(gtmEnable) != 'undefined') && (gtmEnable === true)) {
-                
-                // Add positions to widgets
-                var widgets = this._sortWidgets();
-                
-                // Get widgets elements
-                var widgetsElements = this._getWidgetsElements(widgets);
-                
-                // Create widgets
-                this._createWidgets(widgetsElements);
-                
-                if (this.widgets.length == 0) {
-                    this.sendImpressions();
-                }
-                this.loadingReady = true;
-            }
-        },
-        sendActions : function (data) {
-            dataLayer.push({
-                promos : data.promos,
-                products: data.products,
-                event : data.event
-            });
-        }
-    };
-
-    // Init sender
-    senderGtm.init();
+    // var senderGtm = {
+    //     loadingReady: false,
+    //     widgets: [],
+    //     data: {
+    //         promos: [],
+    //         products: [],
+    //         detail : undefined
+    //     },
+    //
+    //     init : function(){
+    //         if ((typeof(gtmEnable) != 'undefined') && (gtmEnable === true)) {
+    //
+    //             this.sendActions({
+    //                 'promos': 1,
+    //                 'products': 2,
+    //                 'event': 3
+    //             })
+    //         }
+    //     },
+    //     sendActions : function (data) {
+    //         dataLayer.push({
+    //             promos : data.promos,
+    //             products: data.products,
+    //             event : data.event
+    //         });
+    //     }
+    // };
+    // // Init sender
+    // senderGtm.init();
 
 
-    return {
-        senderGtm               : $.mage.senderGtm
-    };
+    // return {
+    //     senderGtm : $.mage.senderGtm
+    // };
 });
