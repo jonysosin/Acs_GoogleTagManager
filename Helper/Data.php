@@ -6,20 +6,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_ACTIVE = 'google/googletagmanager/active';
     const XML_PATH_ACCOUNT = 'google/googletagmanager/account';
 
-    private $product;
-    private $categoryFactory;
-
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      */
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Catalog\Block\Product\View\AbstractView $productBlock,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory
-    ) {
+    public function __construct(\Magento\Framework\App\Helper\Context $context) {
         parent::__construct($context);
-        $this->product = $productBlock->getProduct();
-        $this->categoryFactory = $categoryFactory;
     }
 
     /**
@@ -43,28 +34,5 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAccountId() {
         return $this->scopeConfig->getValue(self::XML_PATH_ACCOUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-    }
-
-    /**
-     * @return \Magento\Catalog\Model\Category
-     */
-    protected function getTeamCategory()
-    {
-        $categoriesId = $this->product->getCategoryIds();
-
-        foreach ($categoriesId as $categoryId) {
-
-            $category = $this->categoryFactory->create()->load($categoryId);
-            $categoryName = $category->getName();
-
-            if ($categoryName != "Purchasable") {
-                return $category;
-            }
-        }
-    }
-
-    public function getTeamDesignName()
-    {
-        return $this->getTeamCategory()->getName();
     }
 }
