@@ -27,8 +27,8 @@ class GtmCode extends Template {
                                  GtmHelper $gtmHelper,
                                  array $data = [])
     {
-        parent::__construct($context, $data);
         $this->_gtmHelper = $gtmHelper;
+        parent::__construct($context, $data);
     }
 
     /**
