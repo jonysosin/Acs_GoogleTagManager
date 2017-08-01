@@ -7,7 +7,6 @@ define(
     [
         'Magento_Customer/js/customer-data',
         'ko'
-        // 'domReady!'
     ],
     function (customerData, ko) {
         'use strict';
