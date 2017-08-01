@@ -6,11 +6,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_ACTIVE = 'google/googletagmanager/active';
     const XML_PATH_ACCOUNT = 'google/googletagmanager/account';
 
+    private $product;
+    private $categoryFactory;
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
+     * @var \Magento\Catalog\Model\ProductFactory
      */
-    public function __construct(\Magento\Framework\App\Helper\Context $context) {
+    private $productFactory;
+
+    /**
+     * Data constructor.
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Catalog\Block\Product\View\AbstractView $productBlock
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     */
+    public function __construct(
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Catalog\Block\Product\View\AbstractView $productBlock,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory
+    ) {
         parent::__construct($context);
+        $this->product = $productBlock->getProduct();
+        $this->categoryFactory = $categoryFactory;
     }
 
     /**
@@ -34,5 +50,51 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAccountId() {
         return $this->scopeConfig->getValue(self::XML_PATH_ACCOUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Category
+     */
+    protected function getTeamCategory()
+    {
+        $categoriesId = $this->product->getCategoryIds();
+
+        foreach ($categoriesId as $categoryId) {
+
+            $category = $this->categoryFactory->create()->load($categoryId);
+            $categoryName = $category->getName();
+
+            if ($categoryName != "Purchasable") {
+                return $category;
+            }
+        }
+    }
+
+    public function getTeamDesignName()
+    {
+        return $this->getTeamCategory()->getName();
+    }
+
+    public function setProduct($product)
+    {
+        $this->product = $product;
+        return $this;
+    }
+
+    public function getDataProduct()
+    {
+        return [
+            'name' => $this->product->getName(),
+            'id' => $this->product->getSku(),
+            'price' => $this->product->getPrice(),
+            'brand' => '',
+            'category' => ($this->getTeamCategory()) ? $this->getTeamCategory()->getName() : '',
+            'variant' => [
+                'color' => $this->product->getColor(),
+                'size' => $this->product->getSize(),
+                'palette' => $this->product->getPalette()
+            ],	// Color, size, etc
+            'quantity' => $this->product->getGtmQuantity()
+        ];
     }
 }
