@@ -1,9 +1,7 @@
 define([
     'jquery',
     'Magento_Customer/js/customer-data',
-    'gtmDatalayer',
-    'domReady!'
-
+    'gtmDatalayer'
 ], function ($, customerData, gtmDatalayer) {
     var Gtm = {
         options: {
